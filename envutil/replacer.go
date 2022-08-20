@@ -1,0 +1,34 @@
+package envutil
+
+import (
+	"fmt"
+	"reflect"
+	"strings"
+)
+
+func ReplaceVars(input string, cfgPtr any) string {
+	v := reflect.ValueOf(cfgPtr)
+
+	// Don't try to process a non-pointer value.
+	if v.Kind() != reflect.Ptr || v.IsNil() {
+		fmt.Printf("%s is not a pointer", v.Kind())
+	}
+
+	v = v.Elem()
+	t := reflect.TypeOf(cfgPtr).Elem()
+
+	output := input
+
+	for i := 0; i < t.NumField(); i++ {
+		envName, ok := t.Field(i).Tag.Lookup("env")
+		if !ok {
+			continue
+		}
+
+		envName = "{" + envName + "}"
+
+		output = strings.ReplaceAll(output, envName, v.Field(i).String())
+	}
+
+	return output
+}
