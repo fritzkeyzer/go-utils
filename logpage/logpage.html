@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<link href='https://fonts.googleapis.com/css?family=JetBrains Mono' rel='stylesheet'>
+
+<head>
+    <title>Logs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<style>
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    body {
+        background-color: #2d2d2d;
+        color: #b3b3b3;
+        font-family: 'JetBrains Mono';
+        /* font-size: 11px; */
+    }
+
+    table {
+        border-collapse: collapse;
+        padding: 1px;
+    }
+
+    td {
+        padding: 1px 15px;
+        vertical-align: top;
+    }
+
+    .multiline {
+        white-space: pre-wrap;
+    }
+
+    html {
+        font-size: small;
+    }
+
+    /* html {
+        font-size: calc(10px + 0.390625vw);
+    } */
+</style>
+
+<body style="background-color:#393535">
+    <h2>Logs</h2>
+    <table>
+        {{ with .Lines }}
+        {{ range . }}
+        <tr>
+            {{if contains .Message "ERROR" }}
+            <td style="color: rgb(255, 82, 82);">
+                <div class="multiline">{{ .Message }}</div>
+            </td>
+            {{else if contains .Message "WARN" }}
+            <td style="color: rgba(255, 243, 82, 0.763);">
+                <div class="multiline">{{ .Message }}</div>
+            </td>
+            {{ else }}
+            <td>
+                <div class="multiline">{{ .Message }}</div>
+            </td>
+            {{ end }}
+        </tr>
+        {{ end }}
+        {{ end }}
+    </table>
+</body>
+
+</html>
+
+<script>
+    setTimeout(function () {
+        window.location.reload(1);
+    }, 5000);
+</script>
