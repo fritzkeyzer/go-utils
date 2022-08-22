@@ -3,6 +3,8 @@ package stringutil_test
 import (
 	"fmt"
 	"testing"
+
+	"github.com/fritzkeyzer/go-utils/stringutil"
 )
 
 func TestIndent(t *testing.T) {
