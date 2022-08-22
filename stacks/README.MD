@@ -1,5 +1,9 @@
 # Pretty
 
+## Example:
+
+https://go.dev/play/p/xPlvzlt99AN
+
 ## Turn this:
 
 ```go
