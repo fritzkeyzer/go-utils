@@ -1,5 +1,4 @@
 [![Test Status][workflow.tests.badge]][workflow.tests]
-[![Go Report Card][goreportcard.badge]][goreportcard]
 
 # Go Utils
 
@@ -51,8 +50,6 @@ Is a collection of utility packages, written in Golang.
 
 
 ---
-[goreportcard.badge]: https://goreportcard.com/badge/github.com/fritzkeyzer/go-utils
-[goreportcard]: https://goreportcard.com/report/github.com/fritzkeyzer/go-utils
 [godoc.badge]: https://godoc.org/github.com/go-fritz/gappfs?status.svg
 [godoc]: https://godoc.org/github.com/fritzkeyzer/go-utils
 [workflow.tests.badge]: https://github.com/fritzkeyzer/go-utils/workflows/tests/badge.svg
