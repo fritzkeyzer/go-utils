@@ -13,30 +13,16 @@ import (
 	"github.com/fritzkeyzer/go-utils/stringutil"
 )
 
-type point struct {
-	pkg     string
-	file    string
-	line    int
-	fn      string
-	snippit string
-}
-
-type routine struct {
-	number string
-	status string
-	stack  []point
-}
-
-func (r *routine) string() string {
-	str := fmt.Sprintf("goroutine %s: %s\n", r.number, r.status)
+func (r *Routine) string() string {
+	str := fmt.Sprintf("goroutine %d: %s\n", r.Number, r.Status)
 
 	var buf bytes.Buffer
 	w := tabwriter.NewWriter(&buf, 2, 30, 1, ' ', tabwriter.TabIndent)
 
 	fmt.Fprintf(w, "%s \t%s \t%s \t%s\n", "package", "function", "file:line", "snippit")
 	fmt.Fprintf(w, "%s \t%s \t%s \t%s\n", "---", "---", "---", "---")
-	for _, p := range r.stack {
-		fmt.Fprintf(w, "%s \t%s \t%s:%d \t%s\n", p.pkg, p.fn, filepath.Base(p.file), p.line, p.snippit)
+	for _, p := range r.Stack {
+		fmt.Fprintf(w, "%s \t%s \t%s:%d \t%s\n", p.Pkg, p.Fn, filepath.Base(p.File), p.Line, p.Snippit)
 	}
 	w.Flush()
 	str += stringutil.Indent(buf.String(), "\t")
@@ -54,7 +40,7 @@ func Trace(args ...any) string {
 			continue
 		}
 		r := parseRoutine(s)
-		r.stack = r.stack[2:]
+		r.Stack = r.Stack[2:]
 
 		str += stringutil.Indent(r.string(), "\t")
 	}
@@ -81,23 +67,23 @@ func PrettyPanic(panic any, deferred bool) string {
 			continue
 		}
 		r := parseRoutine(s)
-		r.stack = r.stack[skip:]
+		r.Stack = r.Stack[skip:]
 		str += stringutil.Indent(r.string(), "\t")
 	}
 
 	return str
 }
 
-func parseRoutine(str string) routine {
+func parseRoutine(str string) Routine {
 	lines := strings.Split(str, "\n")
 
 	line0 := strings.TrimSpace(lines[0])
 	spl := strings.Split(line0, " ")
 	status := spl[1][1 : len(spl[1])-2]
 
-	r := routine{
-		number: spl[0],
-		status: status,
+	r := Routine{
+		//Number: spl[0],
+		Status: status,
 	}
 
 	for i := 1; i+1 < len(lines); i += 2 {
@@ -130,15 +116,15 @@ func parseRoutine(str string) routine {
 		file := fileS[0]
 		ln, _ := strconv.ParseInt(fileS[1], 10, 64)
 
-		p := point{
-			pkg:     pkg[len(pkg)-1],
-			file:    file,
-			line:    int(ln),
-			fn:      preSplit[len(preSplit)-1] + suffix,
-			snippit: readSnippit(file, int(ln)),
+		p := TracePoint{
+			Pkg:     pkg[len(pkg)-1],
+			File:    file,
+			Line:    int(ln),
+			Fn:      preSplit[len(preSplit)-1] + suffix,
+			Snippit: readSnippit(file, int(ln)),
 		}
 
-		r.stack = append(r.stack, p)
+		r.Stack = append(r.Stack, p)
 	}
 
 	return r

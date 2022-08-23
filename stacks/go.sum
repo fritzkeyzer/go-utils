@@ -1,2 +1,6 @@
+github.com/BurntSushi/toml v1.2.0 h1:Rt8g24XnyGTyglgET/PRUNlrUeu9F5L+7FilkXfZgs0=
+github.com/BurntSushi/toml v1.2.0/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
+github.com/fritzkeyzer/go-utils/pretty v0.0.0-20220819173415-2b4fbb58b2a8 h1:TEpfOtokKMpzQKTdti5XXCVncaVTHMRPaFPZFuw8WAI=
+github.com/fritzkeyzer/go-utils/pretty v0.0.0-20220819173415-2b4fbb58b2a8/go.mod h1:XlG99C58A2Taq0DxKK5nNBczeMD3H58khLDjia0FfX8=
 github.com/fritzkeyzer/go-utils/stringutil v0.0.0-20220820172243-395ed914a887 h1:1TCaCx6kUqgwpMnL52e0KA4fyoD6dymwW5Pv3543dgs=
 github.com/fritzkeyzer/go-utils/stringutil v0.0.0-20220820172243-395ed914a887/go.mod h1:DOpIq+P/CZ+00Xx+9X2TGQsi5NP3+NiEhpzgWefR2pE=
