@@ -1,53 +1,55 @@
 package pretty
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"strings"
 )
 
-func Print(o any) {
-	fmt.Println(JsonString(o))
-}
+//func Print(o any) {
+//	fmt.Println(JSONString(o))
+//}
 
-func JsonString(o any) string {
-	s, _ := json.MarshalIndent(o, "", "\t")
+func JSONString(o any) string {
+	s, _ := json.MarshalIndent(o, "", "   ")
 	str := fmt.Sprintln(string(s))
 
 	return FormatJsonString(str)
 }
 
 func FormatJsonString(input string) string {
-	str := input
-
 	// covert single line to multiline
+	var prettyJSON bytes.Buffer
+	if err := json.Indent(&prettyJSON, []byte(input), "", "\t"); err != nil {
+		return input
+	}
+	str := prettyJSON.String()
 
 	// convert to spaces
-	str = strings.ReplaceAll(str, "\t", "    ")
+	str = strings.ReplaceAll(str, "\t", "   ")
 
 	// align values
-
-	//
-
 	lines := strings.Split(str, "\n")
+	alignLines(lines)
 
-	// depth := 0
+	// convert lines back to string
+	str = ""
+	for i := 0; i < len(lines); i++ {
+		l := lines[i]
+		str += l + "\n"
+	}
+
+	return str
+}
+
+func alignLines(lines []string) {
 	align := make([]int, len(lines))
 	currAlign := 0
 	iScope := 0
 	for i := 0; i < len(lines); i++ {
 		l := lines[i]
-
-		if strings.Contains(l, "{") {
-			// depth ++
-			align[i] = 0
-			currAlign = 0
-			iScope = i + 1
-			continue
-		}
-
-		if strings.Contains(l, "}") {
-			//depth --
+		if lineOpening(l) || lineClosing(l) {
 			align[i] = 0
 			currAlign = 0
 			iScope = i + 1
@@ -55,8 +57,9 @@ func FormatJsonString(input string) string {
 		}
 
 		iSpace := strings.Index(l, ":")
+		align[i] = currAlign
 		if iSpace > currAlign {
-			for j := iScope; j <= i; j++ {
+			for j := iScope; j < i; j++ {
 				align[j] = iSpace
 				currAlign = iSpace
 			}
@@ -83,12 +86,12 @@ func FormatJsonString(input string) string {
 
 		lines[i] = l[:iSpace+1] + pad + l[iSpace+1:]
 	}
+}
 
-	str = ""
-	for i := 0; i < len(lines); i++ {
-		l := lines[i]
-		str += l + "\n"
-	}
+func lineOpening(l string) bool {
+	return strings.Contains(l, "{") && !strings.Contains(l, "}")
+}
 
-	return str
+func lineClosing(l string) bool {
+	return strings.Contains(l, "}") && !strings.Contains(l, "{")
 }
