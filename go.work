@@ -6,4 +6,5 @@ use (
 	./sshutil
 	./stacks
 	./stringutil
+	./pretty
 )
