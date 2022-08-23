@@ -26,5 +26,5 @@ func b1() {
 func c1() {
 	st := stacks.ParseStackTrace(string(debug.Stack()))
 
-	fmt.Println(pretty.JsonString(st))
+	fmt.Println(pretty.JSONString(st))
 }

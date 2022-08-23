@@ -1,5 +1,5 @@
 test:
 	go test github.com/fritzkeyzer/go-utils/...
 
-build-ubuntu:
+build:
 	go build github.com/fritzkeyzer/go-utils/...
