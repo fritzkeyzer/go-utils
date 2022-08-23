@@ -17,11 +17,6 @@ func Indent(input, indent string) string {
 // to fit within a specified number of characters.
 // Supports multiline strings.
 func IndentAndWrap(input, indent string, wrap int, wrapChar string) string {
-	//indReplace := "\n" + indent
-	//output := strings.ReplaceAll(input, "\n", indReplace)
-	//
-	//indented := fmt.Sprintf("%s%s", indent, output)
-
 	res := indent
 	lineLen := len(indent)
 	for i := 0; i < len(input); i++ {

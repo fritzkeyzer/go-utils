@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	lp := logpage.NewLogPage(80)
+	lp := logpage.New(80)
 	writer := io.MultiWriter(os.Stderr, lp)
 	log.SetOutput(writer)
 

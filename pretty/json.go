@@ -7,18 +7,16 @@ import (
 	"strings"
 )
 
-//func Print(o any) {
-//	fmt.Println(JSONString(o))
-//}
-
+// JSONString Convert any object in a pretty, indented and aligned json string.
 func JSONString(o any) string {
 	s, _ := json.MarshalIndent(o, "", "   ")
 	str := fmt.Sprintln(string(s))
 
-	return FormatJsonString(str)
+	return FormatJSONString(str)
 }
 
-func FormatJsonString(input string) string {
+// FormatJSONString formats a json string into a prettier, indented and aligned string.
+func FormatJSONString(input string) string {
 	// covert single line to multiline
 	var prettyJSON bytes.Buffer
 	if err := json.Indent(&prettyJSON, []byte(input), "", "\t"); err != nil {

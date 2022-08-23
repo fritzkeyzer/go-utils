@@ -21,11 +21,13 @@ type page struct {
 	Lines []line
 }
 
+// LogPage satisfies the io.Writer interface
 type LogPage struct {
 	page page
 }
 
-func NewLogPage(port int) *LogPage {
+// New hosts a new http LogPage server on the specified port
+func New(port int) *LogPage {
 	l := LogPage{
 		page: page{
 			Lines: make([]line, 0),
@@ -36,8 +38,8 @@ func NewLogPage(port int) *LogPage {
 	return &l
 }
 
+// Write to LogPage logs. Each call is a separate log line.
 func (p *LogPage) Write(data []byte) (n int, err error) {
-
 	if len(p.page.Lines) > maxLines {
 		p.page.Lines = append([]line{{Message: string(data)}}, p.page.Lines[:maxLines-1]...)
 

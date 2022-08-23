@@ -20,7 +20,7 @@ func ExampleLoadCfgFromEnv() {
 	}
 
 	var cfg Config
-	if err := envutil.LoadCfgFromEnv(&cfg); err != nil {
+	if err := envutil.LoadCfg(&cfg); err != nil {
 		log.Fatalf("FATAL: %v", err)
 	}
 
@@ -43,7 +43,7 @@ func ExampleReplaceVars() {
 	}
 
 	var cfg Config
-	if err := envutil.LoadCfgFromEnv(&cfg); err != nil {
+	if err := envutil.LoadCfg(&cfg); err != nil {
 		log.Fatalf("FATAL: %v", err)
 	}
 
@@ -66,7 +66,7 @@ func ExamplePrint() {
 	}
 
 	var cfg Config
-	if err := envutil.LoadCfgFromEnv(&cfg); err != nil {
+	if err := envutil.LoadCfg(&cfg); err != nil {
 		log.Fatalf("FATAL: %v", err)
 	}
 

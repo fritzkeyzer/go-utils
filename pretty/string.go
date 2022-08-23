@@ -7,16 +7,18 @@ import (
 	"strings"
 )
 
-const Indent = "   "
-const DefaultMaxDepth = 10
+const indent = "   "
+const defaultMaxDepth = 10
 
+// Print pretty prints any object to StdErr
 func Print(o any) {
 	fmt.Println(String(o))
 }
 
+// String returns a pretty formatted string of any input
 func String(o any) string {
 	w := &strings.Builder{}
-	Write(w, o, DefaultMaxDepth)
+	Write(w, o, defaultMaxDepth)
 	lines := strings.Split(w.String(), "\n")
 
 	alignLines(lines)
@@ -30,6 +32,8 @@ func String(o any) string {
 	return w.String()
 }
 
+// StringDepth returns a pretty formatted string of any input.
+// Recursion into fields is limited by maxDepth.
 func StringDepth(o any, maxDepth int) string {
 	w := &strings.Builder{}
 	Write(w, o, maxDepth)
@@ -46,6 +50,8 @@ func StringDepth(o any, maxDepth int) string {
 	return w.String()
 }
 
+// Write a pretty formatted string of any input to a provided io.Writer.
+// Recursion into fields is limited by maxDepth.
 func Write(w io.Writer, value any, maxDepth int) {
 	_, _ = fmt.Fprintf(w, "%s: ", reflect.ValueOf(value).Type())
 
@@ -120,8 +126,8 @@ func write(w io.Writer, prefix string, v reflect.Value, depth, maxDepth int) {
 		}
 		_, _ = fmt.Fprintf(w, "[")
 		for i := 0; i < v.Len(); i++ {
-			_, _ = fmt.Fprintf(w, "\n%s", prefix+Indent)
-			write(w, prefix+Indent, v.Index(i), depth+1, maxDepth)
+			_, _ = fmt.Fprintf(w, "\n%s", prefix+indent)
+			write(w, prefix+indent, v.Index(i), depth+1, maxDepth)
 			_, _ = fmt.Fprintf(w, ", ")
 		}
 		_, _ = fmt.Fprintf(w, "\n%s]", prefix)
@@ -133,10 +139,10 @@ func write(w io.Writer, prefix string, v reflect.Value, depth, maxDepth int) {
 		}
 		_, _ = fmt.Fprintf(w, "{")
 		for _, key := range v.MapKeys() {
-			_, _ = fmt.Fprintf(w, "\n%s", prefix+Indent)
-			write(w, prefix+Indent, key, depth+1, maxDepth)
+			_, _ = fmt.Fprintf(w, "\n%s", prefix+indent)
+			write(w, prefix+indent, key, depth+1, maxDepth)
 			_, _ = fmt.Fprintf(w, ": ")
-			write(w, prefix+Indent, v.MapIndex(key), depth+1, maxDepth)
+			write(w, prefix+indent, v.MapIndex(key), depth+1, maxDepth)
 			_, _ = fmt.Fprintf(w, ", ")
 		}
 		_, _ = fmt.Fprintf(w, "\n%s}", prefix)
@@ -148,9 +154,9 @@ func write(w io.Writer, prefix string, v reflect.Value, depth, maxDepth int) {
 		}
 		_, _ = fmt.Fprintf(w, "{")
 		for i := 0; i < v.NumField(); i++ {
-			_, _ = fmt.Fprintf(w, "\n%s", prefix+Indent)
+			_, _ = fmt.Fprintf(w, "\n%s", prefix+indent)
 			_, _ = fmt.Fprintf(w, "%s: ", v.Type().Field(i).Name)
-			write(w, prefix+Indent, v.Field(i), depth+1, maxDepth)
+			write(w, prefix+indent, v.Field(i), depth+1, maxDepth)
 			_, _ = fmt.Fprintf(w, " ")
 		}
 		_, _ = fmt.Fprintf(w, "\n%s}", prefix)

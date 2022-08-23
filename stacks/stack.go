@@ -13,7 +13,7 @@ import (
 	"github.com/fritzkeyzer/go-utils/stringutil"
 )
 
-func (r *Routine) string() string {
+func (r *GoTrace) string() string {
 	str := fmt.Sprintf("goroutine %d: %s\n", r.Number, r.Status)
 
 	var buf bytes.Buffer
@@ -30,6 +30,7 @@ func (r *Routine) string() string {
 	return str
 }
 
+// Trace returns a pretty formatted stacktrace string
 func Trace(args ...any) string {
 	str := string(debug.Stack())
 	split := strings.Split(str, "goroutine")
@@ -74,14 +75,14 @@ func PrettyPanic(panic any, deferred bool) string {
 	return str
 }
 
-func parseRoutine(str string) Routine {
+func parseRoutine(str string) GoTrace {
 	lines := strings.Split(str, "\n")
 
 	line0 := strings.TrimSpace(lines[0])
 	spl := strings.Split(line0, " ")
 	status := spl[1][1 : len(spl[1])-2]
 
-	r := Routine{
+	r := GoTrace{
 		//Number: spl[0],
 		Status: status,
 	}
@@ -116,7 +117,7 @@ func parseRoutine(str string) Routine {
 		file := fileS[0]
 		ln, _ := strconv.ParseInt(fileS[1], 10, 64)
 
-		p := TracePoint{
+		p := TraceLevel{
 			Pkg:     pkg[len(pkg)-1],
 			File:    file,
 			Line:    int(ln),

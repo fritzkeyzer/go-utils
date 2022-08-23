@@ -9,20 +9,13 @@ import (
 	"time"
 )
 
-// Setter is called for any complex struct field with an
-// implementation, allowing developers to override Set
-// behaviour.
-type Setter interface {
-	Set(string) error
-}
-
-// LoadCfgFromEnv takes a pointer to a struct.
+// LoadCfg takes a pointer to a struct.
 //
-// For each field tagged with `env` LoadCfgFromEnv will attempt to load
+// For each field tagged with `env` LoadCfg will attempt to load
 // the environment variable, parse it to the correct type and set the field.
 //
 // If the named env variable isn't found and a 'default' tag is not specified,
-// LoadCfgFromEnv returns an error.
+// LoadCfg returns an error.
 //
 // Example struct:
 //
@@ -31,7 +24,7 @@ type Setter interface {
 //		SomeSecret string   `env:"SOME_SECRET"`
 //		SomeSlice  []string `env:"SOME_SLICE" default:"'hello', 'world'"`
 //	}
-func LoadCfgFromEnv(ptr any) error {
+func LoadCfg(ptr any) error {
 	v := reflect.ValueOf(ptr)
 
 	// Don't try to process a non-pointer value.
@@ -84,20 +77,6 @@ func processField(t reflect.StructField, v reflect.Value) error {
 }
 
 func setField(t reflect.StructField, v reflect.Value, value string) error {
-	// If field implements the Setter interface, invoke it now and
-	// don't continue attempting to set the primitive values.
-	if _, ok := v.Interface().(Setter); ok {
-		instance := reflect.New(t.Type.Elem())
-		v.Set(instance)
-
-		// Re-assert the type with the newed-up instance and call.
-		setter := v.Interface().(Setter)
-		if err := setter.Set(value); err != nil {
-			return fmt.Errorf("custom setter: %w", err)
-		}
-		return nil
-	}
-
 	switch v.Kind() {
 	case reflect.Slice:
 		return setSlice(t, v, value)

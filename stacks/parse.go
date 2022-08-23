@@ -6,22 +6,13 @@ import (
 	"strings"
 )
 
-type Panic struct {
-	Message string
-	Stack   StackTrace
-}
-
-type StackTrace struct {
-	Routines []Routine
-}
-
-type Routine struct {
+type GoTrace struct {
 	Number int
 	Status string
-	Stack  []TracePoint
+	Stack  []TraceLevel
 }
 
-type TracePoint struct {
+type TraceLevel struct {
 	Fn      string
 	Pkg     string
 	File    string
@@ -29,25 +20,23 @@ type TracePoint struct {
 	Snippit string
 }
 
-func ParseStackTrace(trace string) StackTrace {
-	var st StackTrace
-
+// ParseStackTrace takes a go stack trace string and returns a
+// list of traces, for each goroutine.
+func ParseStackTrace(trace string) []GoTrace {
 	split := strings.Split(trace, "\ngoroutine ")
-
+	ret := make([]GoTrace, len(split))
 	for _, s := range split {
 		if len(s) == 0 {
 			continue
 		}
 		r := parseRoutine2(s)
-		//r.stack = r.stack[2:]
-
-		st.Routines = append(st.Routines, r)
+		ret = append(ret, r)
 	}
 
-	return st
+	return ret
 }
 
-func parseRoutine2(str string) Routine {
+func parseRoutine2(str string) GoTrace {
 	lines := strings.Split(str, "\n")
 
 	line0 := strings.TrimSpace(lines[0])
@@ -60,10 +49,7 @@ func parseRoutine2(str string) Routine {
 
 	fmt.Println("line0: ", line0)
 
-	// spl := strings.Split(line0, " ")
-	// fmt.Printf("line0: %s", line0)
-
-	r := Routine{
+	r := GoTrace{
 		Number: int(num),
 		Status: status,
 	}
@@ -76,7 +62,7 @@ func parseRoutine2(str string) Routine {
 	return r
 }
 
-func parseTracePoint(l1, l2 string) TracePoint {
+func parseTracePoint(l1, l2 string) TraceLevel {
 	l1 = strings.TrimSpace(l1)
 	l2 = strings.TrimSpace(l2)
 
@@ -94,7 +80,7 @@ func parseTracePoint(l1, l2 string) TracePoint {
 	line, _ := strconv.ParseInt(lineStr, 10, 64)
 	file := l2[:iColon]
 
-	p := TracePoint{
+	p := TraceLevel{
 		Pkg:     pkg,
 		File:    file,
 		Line:    int(line),
@@ -103,10 +89,4 @@ func parseTracePoint(l1, l2 string) TracePoint {
 	}
 
 	return p
-}
-
-func (st *StackTrace) String() string {
-	str := ""
-
-	return str
 }
