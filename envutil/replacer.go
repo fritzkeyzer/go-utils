@@ -6,6 +6,17 @@ import (
 	"strings"
 )
 
+/*
+ReplaceVars will replace variables in an input string.
+
+eg:
+
+	type Config struct {
+		Var string `env:"VAR_NAME"`
+	}
+	cfg := Config{ Var: "xxx" }
+	ReplaceVars("var = {VAR_NAME}", &cfg) // result: "var = xxx"
+*/
 func ReplaceVars(input string, cfgPtr any) string {
 	v := reflect.ValueOf(cfgPtr)
 

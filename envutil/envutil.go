@@ -16,6 +16,21 @@ type Setter interface {
 	Set(string) error
 }
 
+// LoadCfgFromEnv takes a pointer to a struct.
+//
+// For each field tagged with `env` LoadCfgFromEnv will attempt to load
+// the environment variable, parse it to the correct type and set the field.
+//
+// If the named env variable isn't found and a 'default' tag is not specified,
+// LoadCfgFromEnv returns an error.
+//
+// Example struct:
+//
+//	type Config struct {
+//		EnvName    string   `env:"ENV_NAME" default:"dev"`
+//		SomeSecret string   `env:"SOME_SECRET"`
+//		SomeSlice  []string `env:"SOME_SLICE" default:"'hello', 'world'"`
+//	}
 func LoadCfgFromEnv(ptr any) error {
 	v := reflect.ValueOf(ptr)
 
@@ -30,6 +45,7 @@ func LoadCfgFromEnv(ptr any) error {
 	for i := 0; i < t.NumField(); i++ {
 		if err := processField(t.Field(i), v.Field(i)); err != nil {
 			return err
+			// TODO collect all errors and return concatenated
 		}
 	}
 

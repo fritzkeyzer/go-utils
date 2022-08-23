@@ -6,6 +6,9 @@ import (
 	"strings"
 )
 
+// Print dumps the contents of a struct to a formatted string.
+// All fields are include except ones tagged with `secret:"true"`
+// Secret fields are printed with asterisks.
 func Print(ptr any) string {
 	v := reflect.ValueOf(ptr)
 
