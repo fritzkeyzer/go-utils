@@ -1,0 +1,28 @@
+on:
+  push:
+    branches: [ dev, test, main ]
+    paths-ignore:
+      - '**/README.md'
+  pull_request:
+    branches: [ dev, test, main ]
+    paths-ignore:
+      - '**/README.md'
+
+name: tests
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Setup Environment'
+        shell: bash
+        run: |
+          git config --global core.autocrlf false
+      - name: 'Install Go'
+        uses: 'actions/setup-go@v2'
+        with:
+          go-version-file: go.mod
+      - name: 'Checkout code'
+        uses: 'actions/checkout@v2'
+      - name: 'Test'
+        run: |
+          make test
