@@ -56,8 +56,6 @@ created by testing.(*T).Run
 	if !reflect.DeepEqual(got, want) {
 		t.Fatalf("got != want:\ngot: %s\nwant: %s", pretty.String(want), pretty.String(got))
 	}
-
-	pretty.Print(got)
 }
 
 func ExampleParse() {
@@ -80,7 +78,7 @@ created by testing.(*T).Run
 	//    {
 	//       Number: 4
 	//       Status: "running"
-	//       Stack:  [
+	//       Stack: [
 	//          {
 	//             Fn:   "Stack()"
 	//             Pkg:  "runtime/debug"
