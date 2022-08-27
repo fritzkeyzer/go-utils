@@ -29,7 +29,7 @@ func FormatJSONString(input string) string {
 
 	// align values
 	lines := strings.Split(str, "\n")
-	alignLines(lines)
+	alignFields(lines)
 
 	// convert lines back to string
 	str = ""
@@ -41,16 +41,22 @@ func FormatJSONString(input string) string {
 	return str
 }
 
-func alignLines(lines []string) {
+func alignFields(lines []string) {
 	align := make([]int, len(lines))
 	currAlign := 0
 	iScope := 0
 	for i := 0; i < len(lines); i++ {
 		l := lines[i]
-		if lineOpening(l) || lineClosing(l) {
+		if lineOpening(l) {
 			align[i] = 0
 			currAlign = 0
 			iScope = i + 1
+			continue
+		}
+
+		if lineClosing(l) {
+			align[i] = 0
+			currAlign = 0
 			continue
 		}
 
@@ -87,9 +93,16 @@ func alignLines(lines []string) {
 }
 
 func lineOpening(l string) bool {
-	return strings.Contains(l, "{") && !strings.Contains(l, "}")
+	trimmed := strings.TrimSpace(l)
+	return strings.HasSuffix(trimmed, "{") || strings.HasSuffix(trimmed, "[")
 }
 
 func lineClosing(l string) bool {
-	return strings.Contains(l, "}") && !strings.Contains(l, "{")
+	trimmed := strings.TrimSpace(l)
+
+	if len(trimmed) != 1 {
+		return false
+	}
+
+	return trimmed == "}" || trimmed == "]"
 }

@@ -46,7 +46,7 @@ func ExampleJSONString() {
 	// }
 }
 
-func ExampleFormatJsonString() {
+func ExampleFormatJSONString() {
 	js := `{"Field":"hello world","AnotherField":"world","SomeLongFieldName":"more text","O": {"Field":"more stuff","AnotherField":"asdasd","SomeLongFieldName":"asdasd"}}`
 
 	fmt.Println(pretty.FormatJSONString(js))

@@ -1,4 +1,5 @@
-package envutil
+// Package env is a utility package for loading environment variables into tagged structs.
+package env
 
 import (
 	"fmt"
@@ -9,13 +10,13 @@ import (
 	"time"
 )
 
-// LoadCfg takes a pointer to a struct.
+// Load takes a pointer to a struct.
 //
-// For each field tagged with `env` LoadCfg will attempt to load
+// For each field tagged with `env` Load will attempt to load
 // the environment variable, parse it to the correct type and set the field.
 //
 // If the named env variable isn't found and a 'default' tag is not specified,
-// LoadCfg returns an error.
+// Load returns an error.
 //
 // Example struct:
 //
@@ -24,7 +25,7 @@ import (
 //		SomeSecret string   `env:"SOME_SECRET"`
 //		SomeSlice  []string `env:"SOME_SLICE" default:"'hello', 'world'"`
 //	}
-func LoadCfg(ptr any) error {
+func Load(ptr any) error {
 	v := reflect.ValueOf(ptr)
 
 	// Don't try to process a non-pointer value.

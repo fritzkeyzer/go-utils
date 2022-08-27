@@ -5,12 +5,13 @@ import (
 	"github.com/fritzkeyzer/go-utils/pretty"
 )
 
+// See example:
 func ExamplePrint() {
 	type Object struct {
 		Field             string
 		privateField      string
 		SomeLongFieldName string
-		O                 struct {
+		NestedObject      struct {
 			Field             string
 			AnotherField      string
 			SomeLongFieldName string
@@ -21,7 +22,7 @@ func ExamplePrint() {
 		Field:             "hello world",
 		privateField:      "world",
 		SomeLongFieldName: "more text",
-		O: struct {
+		NestedObject: struct {
 			Field             string
 			AnotherField      string
 			SomeLongFieldName string
@@ -32,13 +33,13 @@ func ExamplePrint() {
 		},
 	}
 
-	pretty.Print(o)
+	pretty.Print(&o)
 	// Output:
-	// pretty_test.Object: {
+	// *pretty_test.Object: -> {
 	//    Field:             "hello world"
 	//    privateField:      "world"
 	//    SomeLongFieldName: "more text"
-	//    O: {
+	//    NestedObject: {
 	//       Field:             "more stuff"
 	//       AnotherField:      "asdasd"
 	//       SomeLongFieldName: "asdasd"
@@ -46,12 +47,12 @@ func ExamplePrint() {
 	// }
 }
 
-func ExampleString() {
+func ExampleString_withOptions() {
 	type Object struct {
 		Field             string
 		privateField      string
 		SomeLongFieldName string
-		O                 struct {
+		NestedObject      struct {
 			Field             string
 			AnotherField      string
 			SomeLongFieldName string
@@ -62,7 +63,7 @@ func ExampleString() {
 		Field:             "hello world",
 		privateField:      "world",
 		SomeLongFieldName: "more text",
-		O: struct {
+		NestedObject: struct {
 			Field             string
 			AnotherField      string
 			SomeLongFieldName string
@@ -73,54 +74,60 @@ func ExampleString() {
 		},
 	}
 
-	fmt.Println(pretty.String(&o))
+	// options:
+	// type Options struct {
+	//    SingleLine    bool
+	//    Indent        string
+	//    AlignFields   bool
+	//    MaxDepth      int
+	//    PrintPointers bool
+	//}
+
+	options := pretty.DefaultOptions
+	options.MaxDepth = 1 // max depth clips nested structs and slices like: {...}
+
+	fmt.Println(pretty.String(&o, options))
 	// Output:
 	// *pretty_test.Object: -> {
 	//    Field:             "hello world"
 	//    privateField:      "world"
 	//    SomeLongFieldName: "more text"
-	//    O: {
-	//       Field:             "more stuff"
-	//       AnotherField:      "asdasd"
-	//       SomeLongFieldName: "asdasd"
-	//    }
+	//    NestedObject:      {...}
 	// }
 }
 
-func ExampleStringDepth() {
+func ExampleString_singleLine() {
 	type Object struct {
-		Field string
-
+		Field             string
+		privateField      string
 		SomeLongFieldName string
-		Complex           struct {
+		NestedObject      struct {
 			Field             string
 			AnotherField      string
 			SomeLongFieldName string
 		}
-		privateField string
 	}
 
 	o := Object{
 		Field:             "hello world",
+		privateField:      "world",
 		SomeLongFieldName: "more text",
-		Complex: struct {
+		NestedObject: struct {
 			Field             string
 			AnotherField      string
 			SomeLongFieldName string
 		}{
 			Field:             "more stuff",
-			AnotherField:      "random",
-			SomeLongFieldName: "text",
+			AnotherField:      "asdasd",
+			SomeLongFieldName: "asdasd",
 		},
-		privateField: "secrets",
 	}
 
-	fmt.Println(pretty.StringDepth(&o, 1))
+	// with options:
+	options := pretty.DefaultOptions
+	options.MaxDepth = 1 // max depth clips nested structs and slices like: {...}
+	options.SingleLine = true
+	fmt.Println(pretty.String(&o, options))
 	// Output:
-	// *pretty_test.Object: -> {
-	//    Field:             "hello world"
-	//    SomeLongFieldName: "more text"
-	//    Complex:           {...}
-	//    privateField:      "secrets"
-	// }
+	// *pretty_test.Object: -> { Field: "hello world"  privateField: "world"  SomeLongFieldName: "more text"  NestedObject: {...}  }
 }

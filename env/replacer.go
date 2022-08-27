@@ -1,4 +1,4 @@
-package envutil
+package env
 
 import (
 	"fmt"
@@ -17,8 +17,8 @@ eg:
 	cfg := Config{ Var: "xxx" }
 	ReplaceVars("var = {VAR_NAME}", &cfg) // result: "var = xxx"
 */
-func ReplaceVars(input string, cfgPtr any) string {
-	v := reflect.ValueOf(cfgPtr)
+func ReplaceVars(input string, ptr any) string {
+	v := reflect.ValueOf(ptr)
 
 	// Don't try to process a non-pointer value.
 	if v.Kind() != reflect.Ptr || v.IsNil() {
@@ -26,7 +26,7 @@ func ReplaceVars(input string, cfgPtr any) string {
 	}
 
 	v = v.Elem()
-	t := reflect.TypeOf(cfgPtr).Elem()
+	t := reflect.TypeOf(ptr).Elem()
 
 	output := input
 

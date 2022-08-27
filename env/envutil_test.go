@@ -1,11 +1,10 @@
-package envutil_test
+package env_test
 
 import (
 	"fmt"
+	"github.com/fritzkeyzer/go-utils/env"
 	"log"
 	"os"
-
-	"github.com/fritzkeyzer/go-utils/envutil"
 )
 
 func ExampleLoadCfgFromEnv() {
@@ -20,11 +19,11 @@ func ExampleLoadCfgFromEnv() {
 	}
 
 	var cfg Config
-	if err := envutil.LoadCfg(&cfg); err != nil {
+	if err := env.Load(&cfg); err != nil {
 		log.Fatalf("FATAL: %v", err)
 	}
 
-	fmt.Print(envutil.Print(&cfg))
+	fmt.Print(env.Print(&cfg))
 	//Output:Config:
 	//	EnvName: dev
 	//	SomeSecret: '***' (SECRET)
@@ -43,12 +42,12 @@ func ExampleReplaceVars() {
 	}
 
 	var cfg Config
-	if err := envutil.LoadCfg(&cfg); err != nil {
+	if err := env.Load(&cfg); err != nil {
 		log.Fatalf("FATAL: %v", err)
 	}
 
 	someExampleString := "environment={ENV_NAME}, secret={SOME_SECRET}"
-	replacedString := envutil.ReplaceVars(someExampleString, &cfg)
+	replacedString := env.ReplaceVars(someExampleString, &cfg)
 
 	fmt.Print(replacedString)
 	//Output:environment=dev, secret=spooky
@@ -66,11 +65,11 @@ func ExamplePrint() {
 	}
 
 	var cfg Config
-	if err := envutil.LoadCfg(&cfg); err != nil {
+	if err := env.Load(&cfg); err != nil {
 		log.Fatalf("FATAL: %v", err)
 	}
 
-	fmt.Print(envutil.Print(&cfg))
+	fmt.Print(env.Print(&cfg))
 	//Output:Config:
 	//	EnvName: dev
 	//	SomeSecret: '******' (SECRET)
