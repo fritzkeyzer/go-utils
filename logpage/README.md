@@ -9,13 +9,15 @@ import "github.com/fritzkeyzer/go-utils/logpage"
 ## Index
 
 - [type LogPage](<#type-logpage>)
-  - [func New(port int) *LogPage](<#func-new>)
+  - [func New() *LogPage](<#func-new>)
+  - [func (p *LogPage) Host(port int, path string) error](<#func-logpage-host>)
+  - [func (p *LogPage) ServeHTTP(w http.ResponseWriter, r *http.Request)](<#func-logpage-servehttp>)
   - [func (p *LogPage) Write(data []byte) (n int, err error)](<#func-logpage-write>)
 
 
 ## type LogPage
 
-LogPage satisfies the io.Writer interface
+LogPage satisfies the io.Writer and http.Handler interfaces.
 
 ```go
 type LogPage struct {
@@ -26,10 +28,26 @@ type LogPage struct {
 ### func New
 
 ```go
-func New(port int) *LogPage
+func New() *LogPage
 ```
 
-New hosts a new http LogPage server on the specified port
+New creates a LogPage and initialises the write buffer.
+
+### func \(\*LogPage\) Host
+
+```go
+func (p *LogPage) Host(port int, path string) error
+```
+
+Host logpage on a specified port.
+
+### func \(\*LogPage\) ServeHTTP
+
+```go
+func (p *LogPage) ServeHTTP(w http.ResponseWriter, r *http.Request)
+```
+
+ServeHTTP satisfies the http.Handler interface. Populates an html template with log lines.
 
 ### func \(\*LogPage\) Write
 

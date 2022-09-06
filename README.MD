@@ -2,7 +2,7 @@
 
 # Go Utils
 
-Is a collection of utility packages, written in Golang.
+Is a collection of zero-dependency, utility packages, written in Golang.
 
 ## envutil
 
@@ -31,13 +31,18 @@ type Config struct {
 
 ## logpage
 
-- Create a localhost server that with a log page.
+- Display your logs in the browser
 - Implements io.Writer, so is very easily added to std log output (as a typical example)
-- Max buffer size.
-- Auto page refresh.
-- Newest logs displayed at top.
+- Implements http.Handler and is easy to add to an existing project.
+- Uses a html template
+- Max buffer size
+- Auto page refresh
+- Newest logs displayed at top
+- Can be included in any project with 2 or 3 lines
+  - [Example simple logger](logpage/examples/log/log.go)
+  - [Example configurable handler](logpage/examples/handler/handler.go)
 
-## pretty
+## pretty (WIP)
 
 - `Print`
   - Print any object with `Options`
@@ -63,7 +68,7 @@ Example `pretty.Print` output:
 }
 ```
 
-## stacks
+## stacks (WIP)
 
 - Parse golang stacktraces into structs
 
